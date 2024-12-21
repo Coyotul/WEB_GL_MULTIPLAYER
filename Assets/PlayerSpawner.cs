@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    public GameObject playerPrefab; // Prefab-ul Player trebuie să fie setat din Inspector
+    public GameObject playerPrefab;
 
     private void Start()
     {
-        // Înregistrează callback-ul doar dacă rulezi pe Server
+        if (NetworkManager.Singleton.IsServer)
         {
             NetworkManager.Singleton.OnClientConnectedCallback += SpawnPlayerForClient;
         }
@@ -15,8 +15,7 @@ public class PlayerSpawner : MonoBehaviour
 
     private void SpawnPlayerForClient(ulong clientId)
     {
-        // Creează un player pentru clientul conectat
-        Debug.Log($"Spawning player for client {clientId}"); // Log pentru spawn
+        Debug.Log($"Spawning player for client {clientId}");
         GameObject playerInstance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
     }
