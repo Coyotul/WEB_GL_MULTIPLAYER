@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Packages/com.community.netcode.transport.azure-webpubsub/Samples/Bootstrap/Sample.unity
+    guid: 3046a596836ccac42bec2cb79bcba7c7
   m_configObjects: {}
