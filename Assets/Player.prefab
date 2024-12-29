@@ -99,8 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de859deb7375c6b48a34b5945e2348b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  playerName: g
+  _playerName: Ber
 --- !u!65 &2824647433273970914
 BoxCollider:
   m_ObjectHideFlags: 0
