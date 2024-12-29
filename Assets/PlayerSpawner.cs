@@ -1,30 +1,58 @@
-﻿using Unity.Netcode;
-using UnityEngine;
+﻿using UnityEngine;
+using NativeWebSocket;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    public GameObject playerPrefab;
+    [SerializeField] private GameObject _playerPrefab;
+    [SerializeField] private GameObject _serverPlayerPrefab;
+
+    private WebSocket _socket;
 
     private void Start()
     {
-        if (NetworkManager.Singleton.IsServer)
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback += SpawnPlayerForClient;
-        }
+        StartServer();
     }
 
-    private void SpawnPlayerForClient(ulong clientId)
+    private async void StartServer()
     {
-        Debug.Log($"Spawning player for client {clientId}");
-        GameObject playerInstance = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+        _socket = new WebSocket("ws://localhost:8080");
+
+        _socket.OnOpen += OnWebSocketOpen;
+        _socket.OnMessage += OnWebSocketMessage;
+        _socket.OnError += OnWebSocketError;
+
+        await _socket.Connect();
     }
 
-    private void OnDestroy()
+    private void OnWebSocketOpen()
     {
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsServer)
+        Debug.Log("Server connection established");
+    }
+
+    private void OnWebSocketMessage(byte[] bytes)
+    {
+        string message = System.Text.Encoding.UTF8.GetString(bytes);
+        Debug.Log("Server received message: " + message);
+
+        // Spawn the player based on the message received
+    }
+
+    private void OnWebSocketError(string error)
+    {
+        Debug.LogError("WebSocket error: " + error);
+    }
+
+    private void OnWebSocketClose()
+    {
+        Debug.Log("Connection closed");
+    }
+
+    private void Update()
+    {
+        // Procesați mesajele WebSocket
+        if (_socket != null)
         {
-            NetworkManager.Singleton.OnClientConnectedCallback -= SpawnPlayerForClient;
+            _socket.DispatchMessageQueue();
         }
     }
 }
