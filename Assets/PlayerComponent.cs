@@ -3,8 +3,11 @@ using NativeWebSocket;
 
 public class PlayerComponent : MonoBehaviour
 {
-    public float speed = 5f;
     private Vector3 _currentPosition;
+    private Camera _camera;
+    
+    private float speed = 5f;
+    private float cameraSpeed = 5f;
 
     private WebSocket _socket;
 
@@ -13,16 +16,24 @@ public class PlayerComponent : MonoBehaviour
     private void Start()
     {
         Set3DNametag(playerName);
+        _camera = Camera.main;
     }
 
     private void Update()
     {
         HandleMovement();
+        MoveCamera();
     }
     
     public string GetPlayerName()
     {
         return playerName;
+    }
+    
+    private void MoveCamera()
+    {
+        Vector3 cameraPosition = new Vector3(_currentPosition.x, _currentPosition.y, -10);
+        _camera.transform.position = Vector3.Lerp(_camera.transform.position, cameraPosition, cameraSpeed * Time.deltaTime);
     }
     
     public Position GetPosition()
@@ -35,7 +46,6 @@ public class PlayerComponent : MonoBehaviour
         };
     }
 
-    // Mișcarea jucătorului local pe baza inputului
     private void HandleMovement()
     {
         float horizontal = Input.GetAxis("Horizontal");
@@ -44,20 +54,18 @@ public class PlayerComponent : MonoBehaviour
         Vector3 movement = new Vector3(horizontal, vertical, 0) * speed * Time.deltaTime;
         _currentPosition = transform.position + movement;
 
-        // Mișcarea jucătorului local
         transform.Translate(movement, Space.World);
     }
     
-    // Setează tag-ul 3D al jucătorului cu numele său
     private void Set3DNametag(string name)
     {
         GameObject nametag = new GameObject("Nametag");
         nametag.transform.SetParent(transform);
-        nametag.transform.localPosition = new Vector3(0, 2, 0);
+        nametag.transform.localPosition = new Vector3(0, 0.2f, 0);
         TextMesh textMesh = nametag.AddComponent<TextMesh>();
         textMesh.text = name;
         textMesh.characterSize = 0.1f;
-        textMesh.fontSize = 100;
+        textMesh.fontSize = 20;
         textMesh.anchor = TextAnchor.MiddleCenter;
         textMesh.alignment = TextAlignment.Center;
         textMesh.color = Color.black;

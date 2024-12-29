@@ -15,7 +15,7 @@ public class PlayerSpawner : MonoBehaviour
     {
         _players = new Dictionary<string, GameObject>();  // Inițializăm dicționarul pentru jucători
         StartServer();
-        var player = Instantiate(_playerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        var player = Instantiate(_playerPrefab, new Vector3(-9.21f, -3, 0), Quaternion.identity);
         _playerComponent = player.GetComponent<PlayerComponent>();
         _players.Add(_playerComponent.GetPlayerName(), _playerPrefab);
     }
