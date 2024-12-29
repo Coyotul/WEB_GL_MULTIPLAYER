@@ -82,7 +82,7 @@ public class PlayerSpawner : MonoBehaviour
     {
         if (_socket != null && _socket.State == WebSocketState.Open)
         {
-            //_socket.DispatchMessageQueue();  // Procesează mesajele WebSocket
+            _socket.DispatchMessageQueue();
             SendPositionToServer(_playerComponent.GetPosition());
         }
         else if (_socket != null && _socket.State == WebSocketState.Closed)
@@ -103,11 +103,6 @@ public class PlayerSpawner : MonoBehaviour
             {
                 doesPlayerExist = true;
                 player.Value.transform.position = playerPosition;
-                break;
-            }
-            if (player.Key == playerComponent.GetPlayerName())
-            {
-                doesPlayerExist = true;
                 break;
             }
         }

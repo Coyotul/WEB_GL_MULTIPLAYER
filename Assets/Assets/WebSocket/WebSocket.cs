@@ -222,6 +222,9 @@ namespace NativeWebSocket
     [DllImport ("__Internal")]
     public static extern int WebSocketGetState (int instanceId);
 
+[DllImport("__Internal")]
+private static extern void WebSocketDispatchMessageQueue();
+
     protected int instanceId;
 
     public event WebSocketOpenEventHandler OnOpen;
@@ -284,6 +287,11 @@ namespace NativeWebSocket
 
       return Task.CompletedTask;
     }
+
+public void DispatchMessageQueue()
+{
+    WebSocketDispatchMessageQueue();
+}
 
 	public void CancelConnection () {
 		if (State == WebSocketState.Open)
