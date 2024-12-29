@@ -28,8 +28,14 @@ public class PlayerSpawner : MonoBehaviour
         _socket.OnOpen += OnWebSocketOpen;
         _socket.OnMessage += OnWebSocketMessage;
         _socket.OnError += OnWebSocketError;
+        _socket.OnClose += OnWebSocketClose;
 
         await _socket.Connect();
+    }
+
+    private void OnWebSocketClose(WebSocketCloseCode closecode)
+    {
+        Debug.Log("Connection closed");
     }
 
     private void OnWebSocketOpen()
@@ -39,9 +45,11 @@ public class PlayerSpawner : MonoBehaviour
     
     private void SendPositionToServer(Position position)
     {
-        string message = $"{{\"type\": \"position\", \"playerId\": \"{_playerComponent.GetPlayerName()}\", \"position\": {{\"x\": {position.x}, \"y\": {position.y}, \"z\": {position.z}}}}}";
+        string message = $"{{\"type\": \"position\", \"playerId\": \"{_playerComponent.GetPlayerName()}\", \"position\": {{\"x\": {position.x.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)}, \"y\": {position.y.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)}, \"z\": {position.z.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)}}}}}";
+        Debug.Log("Sending message: " + message);  // Verificăm mesajul trimis
         _socket.SendText(message);
     }
+
 
     private void OnWebSocketMessage(byte[] bytes)
     {
@@ -68,21 +76,21 @@ public class PlayerSpawner : MonoBehaviour
     {
         Debug.LogError("WebSocket error: " + error);
     }
-
-    private void OnWebSocketClose()
-    {
-        Debug.Log("Connection closed");
-    }
+    
 
     private void Update()
     {
-        // Procesați mesajele WebSocket
-        if (_socket != null)
+        if (_socket != null && _socket.State == WebSocketState.Open)
         {
-            _socket.DispatchMessageQueue();
+            //_socket.DispatchMessageQueue();  // Procesează mesajele WebSocket
             SendPositionToServer(_playerComponent.GetPosition());
         }
+        else if (_socket != null && _socket.State == WebSocketState.Closed)
+        {
+            Debug.Log("Socket closed unexpectedly.");
+        }
     }
+
 
     private void SpawnOrUpdatePlayer(string playerId, Vector3 playerPosition)
     {
