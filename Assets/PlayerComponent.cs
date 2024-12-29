@@ -63,9 +63,9 @@ public class PlayerComponent : MonoBehaviour
 
         transform.Translate(movement, Space.World);
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
-            this.GetComponent<Rigidbody>().AddForce(Vector3.up * 5, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddForce(Vector3.up * 5, ForceMode.Impulse);
         }
     }
     

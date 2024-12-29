@@ -2,6 +2,7 @@
 using UnityEngine;
 using NativeWebSocket;
 using System.Collections.Generic;
+using TMPro;
 
 public class ServerPlayerComponent : MonoBehaviour
 {
@@ -15,8 +16,8 @@ public class ServerPlayerComponent : MonoBehaviour
     {
         if (other.gameObject.name == "Finish")
         {
-            var finishText = GameObject.Find("FinishText");
-            finishText.GetComponent<TextMesh>().text = "Game Over!";
+            var finishText = GameObject.FindGameObjectWithTag("Finish");
+            finishText.GetComponent<TextMeshProUGUI>().text = "Game Over!";
         }
     }
 }
