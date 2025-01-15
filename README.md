@@ -1,5 +1,5 @@
 Pasi instalare:
-Atentie: Descarca doar folderul SPS, restul sunt scripturile nebuild uite
+Atentie: Descarca doar folderul Proiect SPS, restul sunt scripturile nebuild uite
 
 1: Deschidere server jucatorii : ruleaza 'node server.js' intr-un command prompt
 2: Deschide server fisiere build unity: ruleaza 'py -m http.server 8000' intr-un command prompt si intra
