@@ -19,6 +19,7 @@ public class PlayerComponent : MonoBehaviour
 
     private void Start()
     {
+        // Set the player's name as the nametag
         Set3DNametag(_playerName);
         _camera = Camera.main;
         
@@ -39,6 +40,7 @@ public class PlayerComponent : MonoBehaviour
     
     private void MoveCamera()
     {
+        // Move the camera to the player's position with a slight offset
         Vector3 cameraPosition = new Vector3(_currentPosition.x, _currentPosition.y, -10);
         _camera.transform.position = Vector3.Lerp(_camera.transform.position, cameraPosition, _cameraSpeed * Time.deltaTime);
     }
@@ -63,6 +65,7 @@ public class PlayerComponent : MonoBehaviour
 
         transform.Translate(movement, Space.World);
 
+        // To jump we apply an impulse force to the player's rigidbody
         if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
             GetComponent<Rigidbody>().AddForce(Vector3.up * 5, ForceMode.Impulse);
@@ -71,6 +74,7 @@ public class PlayerComponent : MonoBehaviour
     
     private void Set3DNametag(string name)
     {
+        // Create a 3D text object as the player's nametag
         GameObject nametag = new GameObject("Nametag");
         nametag.transform.SetParent(transform);
         nametag.transform.localPosition = new Vector3(0, 0.4f, 0);
@@ -85,17 +89,20 @@ public class PlayerComponent : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        // When the player collides with the finish line, display "You won!" text
         if (other.gameObject.name == "Finish")
         {
             _finishText.GetComponent<TextMeshProUGUI>().text = "You won!";
         }
         else
         {
+            // When the player is grounded, set isGrounded to true to allow jumping
             _isGrounded = true;
         }
     }
     private void OnCollisionExit(Collision other)
     {
+        // When the player is not grounded, set isGrounded to false to prevent double jumping
         _isGrounded = false;
     }
 }
