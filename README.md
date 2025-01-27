@@ -34,10 +34,12 @@ WEB_GL_MULTIPLAYER - folder principal ->
 #Diagrama de arhitectura:
 
 Fisere build <--> Server python http <-> pagina web
+
       Ʌ
       |
       |
       v
+      
 Server javascript players
 
 Serverul pentru playeri creat in javascript va comunica cu fisierele jocului pentru tine cont de numarul de playeri si de pozitia acestora.
